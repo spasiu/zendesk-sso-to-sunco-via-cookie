@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            fetch("/token")
+                .then((response) => response.json())
+                .then(({ ssoToken, submissionUrl, redirectUrl }) => {
+                    const form = document.createElement("form");
+                    const jwtField = document.createElement("input");
+                    const returnToField = document.createElement("input");
+                    returnToField.type = "hidden";
+                    returnToField.name = "return_to";
+                    returnToField.value = redirectUrl;
+                    jwtField.type = "hidden";
+                    jwtField.name = "jwt";
+                    jwtField.value = ssoToken;
+                    form.method = "POST";
+                    form.action = submissionUrl;
+                    form.appendChild(jwtField);
+                    form.appendChild(returnToField);
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+        </script>
+    </body>
+</html>
